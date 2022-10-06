@@ -12,7 +12,7 @@ Virginia Di Biagio Missaglia
 --- email qui ---
 
 Nicolò Galletta
---- email qui ---
+gallettanicolo@gmail.com
 
 Roberto Pistone Nascone
 --- email qui ---
