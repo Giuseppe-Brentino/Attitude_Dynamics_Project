@@ -37,6 +37,11 @@ environment.date = 221*24*3600;                 % Seconds from spring equinox (M
 environment.Rs = astroConstants(2);             % Sun-Earth distance (1 AU) [km]   
 environment.eps = deg2rad(23.45);               % Inclination of the ecliptic plane [rad]
 
+load("WMM.mat");                                % World Magnetic Model parameters 
+environment.WMM.K = K;                          % [-]
+environment.WMM.g = g;                          % [nT]
+environment.WMM.h = h;                          % [nT]
+
 % satellite parameters
 sat.Ix = [];
 sat.Iy = [];
