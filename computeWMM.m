@@ -11,7 +11,8 @@ clearvars; clear all; clc;
     [2].    
     
     Authors:
-    Giuseppe Brentino
+    Giuseppe Brentino, Virginia Di Biagio Missaglia, Roberto Pistone
+    Nascone
     
     Notes: 
     -All the matrices calculated are [n x m];
@@ -28,7 +29,7 @@ clearvars; clear all; clc;
 
 %% Schmidt's quasi-normalization coefficients
 
-N = 12; % desired order of accuracy
+N = 13; % desired order of accuracy
 
 S_nm = zeros(N,N+1); 
 
@@ -49,15 +50,22 @@ for i = 1:N
 end
 
 %% g,h
-WMM_coeffs = readmatrix("WMM.COF",'FileType','text' );
-WMM_coeffs = WMM_coeffs(1:end-2,:);
+%WMM_coeffs = readmatrix("WMM.COF",'FileType','text' );
+%WMM_coeffs = WMM_coeffs(1:end-2,:);
+WMM_coeffs = readmatrix("igrf13coeffs.txt");
+WMM_coeffs = WMM_coeffs(4:end, [2 3 end-1]);
 
 g = zeros(N,N+1);
 h = zeros(N,N+1);
 
 for i = 1:length(WMM_coeffs(:,1))
+    if WMM_coeffs(i, 2) == 0
+        g(WMM_coeffs(i,1),WMM_coeffs(i,2)+1) = WMM_coeffs(i,3);
+    elseif WMM_coeffs(i, 2) == WMM_coeffs(i-1, 2)
+        h(WMM_coeffs(i,1),WMM_coeffs(i,2)+1) = WMM_coeffs(i,3);
+    else
     g(WMM_coeffs(i,1),WMM_coeffs(i,2)+1) = WMM_coeffs(i,3);
-    h(WMM_coeffs(i,1),WMM_coeffs(i,2)+1) = WMM_coeffs(i,4);
+    end
 end
 
 %% Normalization

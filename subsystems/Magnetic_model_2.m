@@ -2,13 +2,36 @@ clearvars; close all; clc;
 
 load("WMM.mat")
 
-N = 12; % ordine (N max is 12 because of K limit in WMM.mat)
+N = 13; % ordine (N max is 12 because of K limit in WMM.mat)
 
-n = 1:13;
-m = 0:13;
 
-lat = 30; % [deg] to test the code, it's an input in the simulink function
-theta = deg2rad(90-lat); % theta is the colatitude [rad]
+
+R = 6371.2;
+r = R+0;
+lat = deg2rad(-80);
+phi = deg2rad(240); %lambda longitudine
+
+%lat = 30; % [deg] to test the code, it's an input in the simulink function
+theta = (pi/2-lat); % theta is the colatitude [rad]
+delta = pi/2-theta;
+alpha_G = 0; %da cambiare su Simulink
+alpha = deg2rad(phi + alpha_G);
+
+%% Spherical Geocentric Coordinates
+%test to validate the code
+
+lambda = phi;
+%phi = lat;
+A = 6378137; %[m]
+f = 1/298.257223563;
+e = sqrt(f*(2-f));
+R_c = A/sqrt(1-e^2*sin(lat)^2);
+p = R_c*cos(lat);
+z = sin(lat)*R_c*(1-e^2);
+rr = sqrt(p^2+z^2);
+theta = pi/2-asin(z/rr);
+
+
 
 %% P-dP
 % validated through the P and dP tables in "Jeremy Davis, Mathematical Modeling of Earthas Magnetic
@@ -60,8 +83,43 @@ for i = 2:N % ciclo in n a partire da n=2 a n=N
     end
 end
 
+%% Magnetic Field
+
+B_r = 0;
+B_th = 0;
+B_phi = 0;
+
+%indice i scorre n da 1 a N
+%indice j scorre m da 0 a n
+
+for m = 0:N
+    for n = 1:N
+        if m<=n
+            B_r = B_r + (R/r)^(n+2)*(n+1)*...
+                ((g(n,m+1)*cos(m*phi) + h(n,m+1)*sin(m*phi))*P(n, m+1));
+            B_th = B_th + (R/r)^(n+2)*...
+                ((g(n,m+1)*cos(m*phi) + h(n,m+1)*sin(m*phi))*dP(n, m+1));
+            B_phi = B_phi + (R/r)^(n+2)*...
+                (m*(-g(n,m+1)*sin(m*phi) + h(n,m+1)*cos(m*phi))* P(n, m+1));
+
+        end
+
+    end
+end
+
+B_th = -B_th;
+B_phi = -B_phi/sin(theta);
+
+%Geocentric Coordinates
+B_x = ( B_r*cos(delta) + B_th*sin(delta) ) * cos(alpha) - B_phi*sin(alpha);
+B_y = ( B_r*cos(delta) + B_th*sin(delta) ) * sin(alpha) + B_phi*cos(alpha);
+B_z = B_r*sin(delta) + B_th*cos(delta);
+
+B = norm([B_r B_phi B_th]);
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TO DO:
 % Implementare K in modo da raggiungere ordini superiori a N=12
 % Implementare il codice in modo più carino includendo P_01 e dP_01 nell'if (FACOLTATIVO)
+% Aggiungere caso dei poli (singolarità)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
