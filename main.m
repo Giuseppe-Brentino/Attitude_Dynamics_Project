@@ -24,18 +24,20 @@ settings.theta = 0;                         % true anomaly [rad] (assumed equal 
 settings.mu = astroConstants(13);            % Earth's planetary constant [km^3/s^2]
 
 [r0, v0] = kep2car(settings);    % initial position and velocity in inertial frame [km]
-settings.w0 = [];               % initial angular velocity in body frame [rad/s]
+settings.w0 = [];                % initial angular velocity in body frame [rad/s]
 settings.E0 = [];                % initial euler angles [rad]
 
+settings.N = 13;                 % order of the magnetic field model [-]
 % environment parameters
 
 environment.E_w =  deg2rad(15.04/3600);         % Earth's angular velocity around it's axis [rad/s]
-environment.theta_G0 = 0;                       % Initial Greenwich Meridian Longitude [rad] (DA CAMBIARE)
+environment.theta_G0 = 0;                       % Initial Greenwich Meridian Longitude [rad] (mezzanotte 21Settembre)
 environment.theta_E0 = 0;                       % Initial Earth longitude wrt the sun [rad]  (DA CAMBIARE)
 environment.S_w = 2*pi/(365.25*24*3600);        % Earth's angular velocity around the sun [rad/s]
 environment.date = 221*24*3600;                 % Seconds from spring equinox (March 20) to Oct 27 [s]
 environment.Rs = astroConstants(2);             % Sun-Earth distance (1 AU) [km]   
 environment.eps = deg2rad(23.45);               % Inclination of the ecliptic plane [rad]
+environment.R = 6371.2;                         % Earth's radius [km]
 
 load("WMM.mat");                                % World Magnetic Model parameters 
 environment.WMM.K = K;                          % [-]
@@ -43,6 +45,8 @@ environment.WMM.g = g;                          % [nT]
 environment.WMM.h = h;                          % [nT]
 
 % satellite parameters
+sat.m  = 720;                                   % Spacecraft mass [kg]
+sat.dipole = 3.5e-3*sat.m * ones(3,1);          % Spacecraft dipole moment [Am^2]
 sat.Ix = [];
 sat.Iy = [];
 sat.Iz = [];
