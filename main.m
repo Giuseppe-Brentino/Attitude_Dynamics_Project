@@ -50,7 +50,11 @@ sat.dipole = 3.5e-3*sat.m * ones(3,1);          % Spacecraft dipole moment [Am^2
 sat.I = [1 1 1]';                               % Column vector with Principal Inertia Moments
 
 % sensor parameters
-sensor.boh = [];
+sensors.star.Bias_max = 10;                      % max bias error [arcsec] 
+sensors.star.fov = 20;                           % nominal field of view [deg]
+sensors.star.fov_err = 2.1;                      % error of the field of view at 3 sigma [arcsec]
+sensors.star.spatial_err = 1.5;                  % star position error in the sensor at 3 sigma [arcsec]
+sensors.star.frequency = 5;                      % maximum update rate [Hz]
 
 % actuator parameters
 coils.boh = [];
