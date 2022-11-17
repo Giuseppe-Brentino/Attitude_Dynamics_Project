@@ -10,8 +10,10 @@
 %}
 
 clearvars; close all; clc;
-addpath('./subsystems/');
 
+addpath('./subsystems/');
+addpath('./data/');
+addpath('./functions/');
 % initial attitude and position conditions (Ephemeris 00:00:00 27-10-2022)
 
 settings.a = 7099.67959313555;              % major semi-axis [km] 
@@ -48,14 +50,26 @@ environment.WMM.h = h;                          % [nT]
 sat.m  = 720;                                   % Spacecraft mass [kg]
 sat.dipole = 3.5e-3*sat.m * ones(3,1);          % Spacecraft dipole moment [Am^2]
 sat.I = [1 1 1]';                               % Column vector with Principal Inertia Moments
-
+theta = deg2rad(70);                            % angle between z_body and solar panel DA TROVARE SUL CAD[rad]
+sat.panel1 = [0;-sin(theta);cos(theta)];        % normal to 1st solar panel in body frame
+sat.panel2 = [0;sin(theta);cos(theta)];         % normal to 2nd solar panel in body frame
 % sensor parameters
+load("star_catalogue.mat")
 sensors.star.Bias_max = 10;                      % max bias error [arcsec] 
-sensors.star.fov = 20;                           % nominal field of view [deg]
-sensors.star.fov_err = 2.1;                      % error of the field of view at 3 sigma [arcsec]
-sensors.star.spatial_err = 1.5;                  % star position error in the sensor at 3 sigma [arcsec]
+sensors.star.fov = 80;                           % nominal field of view [deg]
+sensors.star.spatial_err = deg2rad(1.5/3600);    % star position error in the sensor at 3 sigma [arcsec]
 sensors.star.frequency = 5;                      % maximum update rate [Hz]
-
+sensors.star.inclination = deg2rad(15);          % inclination of the sensor wrt z_body axis [rad]
+sensors.star.focal_length = 20;                  % focal length of the sensor [mm]
+sensors.star.pixel = sensors.star.focal_length...% pixel length [mm]
+    *tan(deg2rad(sensors.star.fov/2))/512;
+theta = pi/2 - sensors.star.inclination;
+sensors.star.ASB1 = [ 1       0          0; ...         % rotation matrix body to sensor 1
+                      0  cos(theta)  sin(theta); ...
+                      0  -sin(theta) cos(theta)];
+sensors.star.ASB2 = [ 1       0          0; ...
+                      0  cos(-theta)  sin(-theta); ...  % rotation matrix body to sensor 2
+                      0  sin(-theta)  -cos(-theta)];
 % actuator parameters
 coils.boh = [];
 secondActuator.boh = [];
