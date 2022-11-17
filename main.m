@@ -21,11 +21,11 @@ settings.OM = deg2rad(315.709234758653);    % RAAN [rad]
 settings.om = deg2rad(101.432935891144);    % pericenter's anomaly [rad]
 settings.theta = 0;                         % true anomaly [rad] (assumed equal to zero)
 
-settings.mu = astroConstants(13);            % Earth's planetary constant [km^3/s^2]
+settings.mu = astroConstants(13);           % Earth's planetary constant [km^3/s^2]
 
 [r0, v0] = kep2car(settings);    % initial position and velocity in inertial frame [km]
-settings.w0 = [];                % initial angular velocity in body frame [rad/s]
-settings.E0 = [];                % initial euler angles [rad]
+settings.w0 = [0 0 0]';                % initial angular velocity in body frame [rad/s]
+settings.E0 = [0 0 0]';                % initial euler angles [rad]
 
 settings.N = 13;                 % order of the magnetic field model [-]
 % environment parameters
@@ -47,12 +47,14 @@ environment.WMM.h = h;                          % [nT]
 % satellite parameters
 sat.m  = 720;                                   % Spacecraft mass [kg]
 sat.dipole = 3.5e-3*sat.m * ones(3,1);          % Spacecraft dipole moment [Am^2]
-sat.Ix = [];
-sat.Iy = [];
-sat.Iz = [];
+sat.I = [1 1 1]';                               % Column vector with Principal Inertia Moments
 
 % sensor parameters
-sensor.boh = [];
+sensors.star.Bias_max = 10;                      % max bias error [arcsec] 
+sensors.star.fov = 20;                           % nominal field of view [deg]
+sensors.star.fov_err = 2.1;                      % error of the field of view at 3 sigma [arcsec]
+sensors.star.spatial_err = 1.5;                  % star position error in the sensor at 3 sigma [arcsec]
+sensors.star.frequency = 5;                      % maximum update rate [Hz]
 
 % actuator parameters
 coils.boh = [];
