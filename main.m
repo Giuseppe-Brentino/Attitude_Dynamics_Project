@@ -73,6 +73,18 @@ sensors.star.ASB1 = [ 1       0          0; ...         % rotation matrix body t
 sensors.star.ASB2 = [ 1       0          0; ...
                       0  cos(-theta)  sin(-theta); ...  % rotation matrix body to sensor 2
                       0  sin(-theta)  -cos(-theta)];
+% magnetic sensor parameters
+sensors.mag.acc = 0.5*1e-2;                              % accuracy percentage of full scale
+sensors.mag.lin = 0.015*1e-2;                            % linearity percentage of full scale
+sensors.mag.FMR = 100*1e3;                                 % field measurement of range [nT]
+sensors.mag.STD_dev = sqrt( (sensors.mag.acc/(sqrt(3)))^2 ...
+    + (sensors.mag.lin/(sqrt(3)))^2 )*sensors.mag.FMR;        % standard deviation 
+sensors.mag.variance = (sensors.mag.STD_dev)^2;            % variance 
+sensors.mag.sensitivity = 100*1e-6;                        % sensitivity [V/nT]
+sensors.mag.quant_V = 0.050;                                 % quantization interval [V]
+sensors.mag.quant_T = sensors.mag.quant_V/sensors.mag.sensitivity;      % quantization interval [nT]
+sensors.mag.frequency = 1/5;                                    % sample time [s]
+
 % actuator parameters
 coils.boh = [];
 secondActuator.boh = [];
