@@ -56,7 +56,7 @@ sat.panel2 = [0;sin(theta);cos(theta)];         % normal to 2nd solar panel in b
 % sensor parameters
 load("star_catalogue.mat")
 sensors.star.Bias_max = 10;                      % max bias error [arcsec] 
-sensors.star.fov = 80;                           % nominal field of view [deg]
+sensors.star.fov = 20;                           % nominal field of view [deg]
 sensors.star.spatial_err = deg2rad(1.5/3600);    % star position error in the sensor at 3 sigma [arcsec]
 sensors.star.frequency = 5;                      % maximum update rate [Hz]
 sensors.star.inclination = deg2rad(15);          % inclination of the sensor wrt z_body axis [rad]
@@ -64,6 +64,9 @@ sensors.star.focal_length = 20;                  % focal length of the sensor [m
 sensors.star.pixel = sensors.star.focal_length...% pixel length [mm]
     *tan(deg2rad(sensors.star.fov/2))/512;
 theta = pi/2 - sensors.star.inclination;
+sensors.star.S = zeros(4, 10);  
+sensors.star.alpha = zeros (10, 1); 
+sensors.star.delta = zeros (10, 1); 
 sensors.star.ASB1 = [ 1       0          0; ...         % rotation matrix body to sensor 1
                       0  cos(theta)  sin(theta); ...
                       0  -sin(theta) cos(theta)];
