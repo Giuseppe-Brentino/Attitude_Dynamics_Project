@@ -126,43 +126,43 @@ sensors.mag.frequency = 1/5;                                                % sa
 coils.boh = [];
 secondActuator.boh = [];
 
-test = sim("Model.slx");
-
-
-%% Plot
-tvec=test.tout;
-
-figure
-plot(test.w_BN)
-xlim([tvec(1) tvec(end)]); grid on;
-title('w_BN')
-
-figure
-plot(test.A_BN)
-xlim([tvec(1) tvec(end)]); grid on;
-title('A_BN')
-
-figure
-plot(test.A_BL)
-xlim([tvec(1) tvec(end)]); grid on;
-title('A_BL')
-
-figure
-plot(test.A_LN)
-xlim([tvec(1) tvec(end)]); grid on;
-title('A_LN')
-
-figure
-plot(test.GG_Torque)
-xlim([tvec(1) tvec(end)]); grid on;
-title('Gravity gradient disturbance torque')
-
-figure
-plot(test.Magnetic_torque)
-xlim([tvec(1) tvec(end)]); grid on;
-title('Magnetic disturbance torque')
-
-figure
-plot(test.tot_torque)
-xlim([tvec(1) tvec(end)]); grid on;
-title('Total torque')
+% test = sim("Model.slx");
+% 
+% 
+% %% Plot
+% tvec=test.tout;
+% 
+% figure
+% plot(test.w_BN)
+% xlim([tvec(1) tvec(end)]); grid on;
+% title('w_BN')
+% 
+% figure
+% plot(test.A_BN)
+% xlim([tvec(1) tvec(end)]); grid on;
+% title('A_BN')
+% 
+% figure
+% plot(test.A_BL)
+% xlim([tvec(1) tvec(end)]); grid on;
+% title('A_BL')
+% 
+% figure
+% plot(test.A_LN)
+% xlim([tvec(1) tvec(end)]); grid on;
+% title('A_LN')
+% 
+% figure
+% plot(test.GG_Torque)
+% xlim([tvec(1) tvec(end)]); grid on;
+% title('Gravity gradient disturbance torque')
+% 
+% figure
+% plot(test.Magnetic_torque)
+% xlim([tvec(1) tvec(end)]); grid on;
+% title('Magnetic disturbance torque')
+% 
+% figure
+% plot(test.tot_torque)
+% xlim([tvec(1) tvec(end)]); grid on;
+% title('Total torque')
