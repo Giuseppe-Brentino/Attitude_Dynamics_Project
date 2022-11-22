@@ -15,7 +15,7 @@ G = 6.67408e-20;
 mt = 5.97219e24;
 r_gc = 0.015*[1,1,1];  % Che roba è???
 
-orbit = 'GEO';
+orbit = 'LEO';
 
 switch orbit
     case 'LEO'
@@ -56,14 +56,15 @@ settings.OM = deg2rad(0);                                                   % RA
 settings.om = deg2rad(0);                                                   % pericenter's anomaly [rad]
 settings.theta = 0;                                                         % true anomaly [rad] (assumed equal to zero)
  
-settings.mu = astroConstants(13);                                           % Earth's planetary constant [km^3/s^2]
+% settings.mu = astroConstants(13);                                           % Earth's planetary constant [km^3/s^2]
+settings.mu = G*mt;
 
 %% Initial conditions 
 [r0, v0] = kep2car(settings);                                               % initial position and velocity in inertial frame [km]
 settings.w0 = [0 0 n]';                                                     % initial angular velocity in body frame [rad/s]
 settings.E0 = [0 0 0]';                                                     % initial euler angles [rad]
 
-settings.N = 13;                                                            % order of the magnetic field model [-]
+settings.N = 1;                                                            % order of the magnetic field model [-]
 
 %% environment parameters
 environment.E_w =  deg2rad(15.04/3600);                                     % Earth's angular velocity around it's axis [rad/s]
@@ -127,8 +128,8 @@ coils.boh = [];
 secondActuator.boh = [];
 
 % test = sim("Model.slx");
-% 
-% 
+
+
 % %% Plot
 % tvec=test.tout;
 % 
