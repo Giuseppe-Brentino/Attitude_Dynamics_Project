@@ -50,9 +50,10 @@ environment.WMM.h = h;                          % [nT]
 sat.m  = 720;                                   % Spacecraft mass [kg]
 sat.dipole = 3.5e-3*sat.m * ones(3,1);          % Spacecraft dipole moment [Am^2]
 sat.I = [1 1 1]';                               % Column vector with Principal Inertia Moments
-theta = deg2rad(70);                            % angle between z_body and solar panel DA TROVARE SUL CAD[rad]
+theta = deg2rad(38.35);                         % angle between z_body and solar panel DA TROVARE SUL CAD[rad]
 sat.panel1 = [0;-sin(theta);cos(theta)];        % normal to 1st solar panel in body frame
 sat.panel2 = [0;sin(theta);cos(theta)];         % normal to 2nd solar panel in body frame
+
 % sensor parameters
 load("star_catalogue.mat")                     
 sensors.star.fov = 20;                           % nominal field of view [deg]
@@ -105,8 +106,15 @@ A_mag=[cos(ax) sin(ax)*cos(bx) sin(ax)*sin(bx);
 sensors.mag.A_mag = A_mag;
 
 % actuator parameters
-coils.boh = [];
-secondActuator.boh = [];
+
+thruster.thrust = 0.01;                                 % Nominal thrust [N]   
+thruster.direction = [ 0  0  0  0  0  0  0  0; ...      % Direction in which the thrust is applied
+                       0  0  0  0  1 -1 -1  1; ...
+                       1 -1  1 -1  0  0  0  0; ]; 
+thruster.position = ones(3,8);                          % Thruster position wrt center of mass [m]
+thruster.firing_time = 0.05;                            % Minimum firing time [s]
+
+magnetorquers.dipole = 30;                              % Maximum magnetic dipole [Am^2] da datsheet (attuatore su eoportal)
 
 % test = sim("orbit_propagation.slx");
 
