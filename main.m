@@ -84,6 +84,25 @@ sensors.mag.sensitivity = 100*1e-6;                        % sensitivity [V/nT]
 sensors.mag.quant_V = 0.050;                                 % quantization interval [V]
 sensors.mag.quant_T = sensors.mag.quant_V/sensors.mag.sensitivity;      % quantization interval [nT]
 sensors.mag.frequency = 1/5;                                    % sample time [s]
+sensors.mag.angles.ax=deg2rad(0.5);
+sensors.mag.angles.ay=deg2rad(0.5);
+sensors.mag.angles.az=deg2rad(0.5);
+sensors.mag.angles.bx=deg2rad(10);
+sensors.mag.angles.by=deg2rad(20);
+sensors.mag.angles.bz=deg2rad(30);
+
+ax=sensors.mag.angles.ax;
+ay=sensors.mag.angles.ay;
+az=sensors.mag.angles.az;
+bx=sensors.mag.angles.bx;
+by=sensors.mag.angles.by;
+bz=sensors.mag.angles.bz;
+
+A_mag=[cos(ax) sin(ax)*cos(bx) sin(ax)*sin(bx);
+    sin(ay)*cos(by) cos(ay) sin(ay)*sin(by);
+    sin(az)*cos(bz) sin(az)*sin(bz) cos(az)];
+
+sensors.mag.A_mag = A_mag;
 
 % actuator parameters
 coils.boh = [];
