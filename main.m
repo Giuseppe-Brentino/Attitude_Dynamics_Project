@@ -74,6 +74,8 @@ sensors.star.ASB1 = [ 1       0          0; ...         % rotation matrix body t
 sensors.star.ASB2 = [ 1       0          0; ...
                       0  cos(-theta)  sin(-theta); ...  % rotation matrix body to sensor 2 CHECK
                       0  -sin(-theta)  cos(-theta)];
+sensors.star.opt_w = deg2rad(0.3);
+sensors.star.reduced_perf_w = deg2rad(1.5);
 % magnetic sensor parameters
 sensors.mag.acc = 0.5*1e-2;                              % accuracy percentage of full scale
 sensors.mag.lin = 0.015*1e-2;                            % linearity percentage of full scale
