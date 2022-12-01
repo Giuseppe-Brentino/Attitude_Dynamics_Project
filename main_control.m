@@ -11,6 +11,37 @@ main;
 % linearizzazione intorno a w = [0, 0, 0]
 
 dt = 0.1;                       % frequenza del controllore
-A = eye(3);
-B = dt*inv(diag(sat.I));
+w = 0;
+I = sat.I;
 
+
+%% test ga
+% parpool
+% lb = [0 1 1];
+% ub = [0.1 100 100];
+% options = optimoptions("ga","PlotFcn","gaplotbestf","PopulationSize",100,"MaxGenerations",20);
+% X = ga(@(X)fitnessfcn(X,I,w,sat,settings),3,[],[],[],[],lb,ub,[],options);
+
+%% LQR aaaa
+%load("LQR_Data.mat")
+% A =[0 (I(2)-I(3))/I(1)*w (I(2)-I(3))/I(1)*w;...
+%     (I(3)-I(1))/I(2)*w 0 (I(3)-I(1))/I(2)*w;...
+%     (I(1)-I(2))/I(3)*w (I(1)-I(2))/I(3)*w 0] + X(1)*eye(3);
+% B = inv(diag(sat.I));
+% R = diag(X(3)*ones(3,1));
+% Q = diag(X(2)*ones(3,1));
+% 
+% [k,s,clp] = lqr(A,B,Q,R);
+% 
+% % save LQR_Data X
+
+%% LQR AAAAAAAAAAAAAAAAAAAAA
+
+A =[0 (I(2)-I(3))/I(1)*w (I(2)-I(3))/I(1)*w;...
+    (I(3)-I(1))/I(2)*w 0 (I(3)-I(1))/I(2)*w;...
+    (I(1)-I(2))/I(3)*w (I(1)-I(2))/I(3)*w 0] + 0.01*eye(3);
+B = inv(diag(sat.I));
+R = diag(2000*ones(3,1));
+Q = diag(0.1*ones(3,1));
+
+[k,s,clp] = lqr(A,B,Q,R);

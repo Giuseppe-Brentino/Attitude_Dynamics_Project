@@ -26,7 +26,7 @@ settings.theta = 0;                         % true anomaly [rad] (assumed equal 
 settings.mu = astroConstants(13);           % Earth's planetary constant [km^3/s^2]
 
 [r0, v0] = kep2car(settings);    % initial position and velocity in inertial frame [km]
-settings.w0 = [0 0 0]';                % initial angular velocity in body frame [rad/s]
+settings.w0 = [0.02 0.02 0.02]';                % initial angular velocity in body frame [rad/s]
 settings.E0 = [0 0 0]';                % initial euler angles [rad]
 settings.q0 = [0 0 0 1]';              % initial estimamted quaternion [-]
 
@@ -50,7 +50,7 @@ environment.WMM.h = h;                          % [nT]
 % satellite parameters
 sat.m  = 720;                                   % Spacecraft mass [kg]
 sat.dipole = 3.5e-3*sat.m * ones(3,1);          % Spacecraft dipole moment [Am^2]
-sat.I = [1000 500 1500]';                               % Column vector with Principal Inertia Moments
+sat.I = [279 945 1084]';                               % Column vector with Principal Inertia Moments
 theta = deg2rad(38.35);                         % angle between z_body and solar panel DA TROVARE SUL CAD[rad]
 sat.panel1 = [0;-sin(theta);cos(theta)];        % normal to 1st solar panel in body frame
 sat.panel2 = [0;sin(theta);cos(theta)];         % normal to 2nd solar panel in body frame
