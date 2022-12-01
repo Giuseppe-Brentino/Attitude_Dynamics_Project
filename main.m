@@ -28,6 +28,7 @@ settings.mu = astroConstants(13);           % Earth's planetary constant [km^3/s
 [r0, v0] = kep2car(settings);    % initial position and velocity in inertial frame [km]
 settings.w0 = [0 0 0]';                % initial angular velocity in body frame [rad/s]
 settings.E0 = [0 0 0]';                % initial euler angles [rad]
+settings.q0 = [0 0 0 1]';              % initial estimamted quaternion [-]
 
 settings.N = 13;                 % order of the magnetic field model [-]
 % environment parameters
@@ -49,7 +50,7 @@ environment.WMM.h = h;                          % [nT]
 % satellite parameters
 sat.m  = 720;                                   % Spacecraft mass [kg]
 sat.dipole = 3.5e-3*sat.m * ones(3,1);          % Spacecraft dipole moment [Am^2]
-sat.I = [1 1 1]';                               % Column vector with Principal Inertia Moments
+sat.I = [1000 500 1500]';                               % Column vector with Principal Inertia Moments
 theta = deg2rad(38.35);                         % angle between z_body and solar panel DA TROVARE SUL CAD[rad]
 sat.panel1 = [0;-sin(theta);cos(theta)];        % normal to 1st solar panel in body frame
 sat.panel2 = [0;sin(theta);cos(theta)];         % normal to 2nd solar panel in body frame
@@ -59,7 +60,7 @@ load("star_catalogue.mat")
 sensors.star.fov = 20;                           % nominal field of view [deg]
 sensors.star.alpha_err = (deg2rad(2/3600))^2;    % variance of alpha [rad]
 sensors.star.delta_err = (deg2rad(4.91/3600))^2; % variance of delta [rad]
-sensors.star.frequency = 5;                      % maximum update rate [Hz]
+sensors.star.frequency = 0.3;                      % maximum update rate [Hz]
 sensors.star.inclination = deg2rad(15);          % inclination of the sensor wrt z_body axis [rad]
 sensors.star.focal_length = 20;                  % focal length of the sensor [mm]
 sensors.star.pixel = sensors.star.focal_length...% pixel length [mm]
