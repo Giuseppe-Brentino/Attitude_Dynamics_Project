@@ -26,7 +26,7 @@ settings.theta = 0;                         % true anomaly [rad] (assumed equal 
 settings.mu = astroConstants(13);           % Earth's planetary constant [km^3/s^2]
 
 [r0, v0] = kep2car(settings);    % initial position and velocity in inertial frame [km]
-settings.w0 = [0.02 0.02 0.02]';                % initial angular velocity in body frame [rad/s]
+settings.w0 = [0.2 0.2 0.2]';                % initial angular velocity in body frame [rad/s]
 settings.E0 = [0 0 0]';                % initial euler angles [rad]
 settings.q0 = [0 0 0 1]';              % initial estimamted quaternion [-]
 
@@ -60,7 +60,7 @@ load("star_catalogue.mat")
 sensors.star.fov = 20;                           % nominal field of view [deg]
 sensors.star.alpha_err = (deg2rad(2/3600))^2;    % variance of alpha [rad]
 sensors.star.delta_err = (deg2rad(4.91/3600))^2; % variance of delta [rad]
-sensors.star.frequency = 0.3;                      % maximum update rate [Hz]
+sensors.star.frequency = 1;                      % maximum update rate [Hz]
 sensors.star.inclination = deg2rad(15);          % inclination of the sensor wrt z_body axis [rad]
 sensors.star.focal_length = 20;                  % focal length of the sensor [mm]
 sensors.star.pixel = sensors.star.focal_length...% pixel length [mm]
@@ -118,6 +118,15 @@ thruster.position = ones(3,8);                          % Thruster position wrt 
 thruster.firing_time = 0.05;                            % Minimum firing time [s]
 
 magnetorquers.dipole = 30;                              % Maximum magnetic dipole [Am^2] da datsheet (attuatore su eoportal)
+
+% Kalman filter
+kalman.Q = diag(0.01*ones(3,1));                         % measure noise
+kalman.R = diag(1*ones(3,1));                         % model noise
+kalman.P = diag(0.1*ones(3,1));                         % covariance matrix
+kalman.u = zeros(3, 1);                                 % initial control value
+kalman.frequency = 5;
+kalman.B = diag(1./sat.I)*1/kalman.frequency;
+kalman.w0 = zeros(3,1);
 
 % test = sim("orbit_propagation.slx");
 
