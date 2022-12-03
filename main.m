@@ -26,9 +26,9 @@ settings.theta = 0;                         % true anomaly [rad] (assumed equal 
 settings.mu = astroConstants(13);           % Earth's planetary constant [km^3/s^2]
 
 [r0, v0] = kep2car(settings);    % initial position and velocity in inertial frame [km]
-settings.w0 = [0.2 0.2 0.2]';    % initial angular velocity in body frame [rad/s]
-settings.E0 = [0 0 0]';          % initial euler angles [rad]
-settings.q0 = [0 0 0 1]';        % initial estimamted quaternion [-]
+settings.w0 = [0 0 0]';                % initial angular velocity in body frame [rad/s]
+settings.E0 = [0 0 0]';                % initial euler angles [rad]
+settings.q0 = [0 0 0 1]';              % initial estimamted quaternion [-]
 
 settings.N = 13;                 % order of the magnetic field model [-]
 % environment parameters
@@ -58,7 +58,7 @@ sat.I = [279 945 1085]';                        % Column vector with Principal I
 theta = deg2rad(38.35);                         % angle between z_body and solar panel DA TROVARE SUL CAD[rad]
 beta = deg2rad(8.84);                           % angle between y_body and S/C sides DA TROVARE SUL CAD[rad]
 % normal to each surface in body frame
-sat.panel1.vec = [0;-sin(theta);cos(theta)];    
+sat.panel1.vec = [0;-sin(theta);cos(theta)];
 sat.panel2.vec = [0;sin(theta);cos(theta)]; 
 sat.base1.vec  = [1; 0; 0];
 sat.base2.vec  = [-1; 0; 0];
@@ -141,7 +141,6 @@ A_mag=[cos(ax) sin(ax)*cos(bx) sin(ax)*sin(bx);
 sensors.mag.A_mag = A_mag;
 
 % actuator parameters
-
 thruster.thrust = 0.01;                                 % Nominal thrust [N]   
 thruster.direction = [ 0  0  0  0  0  0  0  0; ...      % Direction in which the thrust is applied
                        0  0  0  0  1 -1 -1  1; ...
@@ -161,5 +160,3 @@ kalman.B = diag(1./sat.I)*1/kalman.frequency;
 kalman.w0 = zeros(3,1);
 
 % test = sim("orbit_propagation.slx");
-
-
