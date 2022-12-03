@@ -54,37 +54,35 @@ environment.P=environment.Fe/environment.c;     % Solar pressure [N/m^2]
 % satellite parameters
 sat.m  = 720;                                   % Spacecraft mass [kg]
 sat.dipole = 3.5e-3*sat.m * ones(3,1);          % Spacecraft dipole moment [Am^2]
-sat.I = [279 945 1084]';                        % Column vector with Principal Inertia Moments
+sat.I = [279 945 1085]';                        % Column vector with Principal Inertia Moments
 theta = deg2rad(38.35);                         % angle between z_body and solar panel DA TROVARE SUL CAD[rad]
 beta = deg2rad(8.84);                           % angle between y_body and S/C sides DA TROVARE SUL CAD[rad]
-sat.panel1 = [0;-sin(theta);cos(theta)];        % normal to 1st solar panel in body frame
-sat.panel2 = [0;sin(theta);cos(theta)];         % normal to 2nd solar panel in body frame
-
-sat.panel1.vec = [0;-sin(theta);cos(theta)];    % normal to 1st solar panel in body frame
-sat.panel2.vec = [0;sin(theta);cos(theta)];     % normal to 2nd solar panel in body frame
+% normal to each surface in body frame
+sat.panel1.vec = [0;-sin(theta);cos(theta)];    
+sat.panel2.vec = [0;sin(theta);cos(theta)]; 
 sat.base1.vec  = [1; 0; 0];
-sat.base2.vec  = -sat.base1.vec;
+sat.base2.vec  = [-1; 0; 0];
 sat.side3.vec  = [0; cos(beta); -sin(beta)];
 sat.side4.vec  = [0; 0; -1];
 sat.side5.vec  = [0; -cos(beta); -sin(beta)];
-
-sat.panel1.r = [0;-sqrt(2);sqrt(2)];     % vectors from centroide to CoG [m]
-sat.panel2.r = [0;sqrt(2);sqrt(2)];             
-sat.base1.r  = [2; 0; 0];
-sat.base2.r  = -sat.base1.r;
-sat.side3.r  = [0; 1.2; 0];
-sat.side4.r  = [0; 0; -0.9];
-sat.side5.r  = [0; -1.2; 0];
-
-sat.panel1.A = 5048400e-6;      % area of the panel [m^2]
+% vectors from centroide to CoG [m]
+sat.panel1.r = [88; -611; 618]*1e-3;     
+sat.panel2.r = [88; -611; 618]*1e-3;             
+sat.base1.r  = [1802; 0; 152]*1e-3;
+sat.base2.r  = [-1715; 0; 152]*1e-3;
+sat.side3.r  = [90; 1113; -119]*1e-3;
+sat.side4.r  = [88; 0; -419]*1e-3;
+sat.side5.r  = [90; -1113; -119]*1e-3;
+% area of the panel [m^2]
+sat.panel1.A = 5048400e-6;      
 sat.panel2.A = sat.panel1.A;
 sat.base1.A = 2402565e-6;
 sat.base2.A = sat.base1.A;
 sat.side3.A = 2187269e-6;
 sat.side4.A = 7981554e-6;
 sat.side5.A = sat.side3.A;
-
-sat.rho_s.panel=0.1;    % reflectance coefficients
+% reflectance coefficients
+sat.rho_s.panel=0.1;
 sat.rho_s.side=0.5;
 sat.rho_d.panel=0.1;
 sat.rho_d.side=0.1;
