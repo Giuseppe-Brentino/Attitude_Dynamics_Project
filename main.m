@@ -26,9 +26,9 @@ settings.theta = 0;                         % true anomaly [rad] (assumed equal 
 settings.mu = astroConstants(13);           % Earth's planetary constant [km^3/s^2]
 
 [r0, v0] = kep2car(settings);    % initial position and velocity in inertial frame [km]
-settings.w0 = [0.2 0.2 0.2]';                % initial angular velocity in body frame [rad/s]
-settings.E0 = [0 0 0]';                % initial euler angles [rad]
-settings.q0 = [0 0 0 1]';              % initial estimamted quaternion [-]
+settings.w0 = [0.2 0.2 0.2]';    % initial angular velocity in body frame [rad/s]
+settings.E0 = [0 0 0]';          % initial euler angles [rad]
+settings.q0 = [0 0 0 1]';        % initial estimamted quaternion [-]
 
 settings.N = 13;                 % order of the magnetic field model [-]
 % environment parameters
@@ -47,13 +47,47 @@ environment.WMM.K = K;                          % [-]
 environment.WMM.g = g;                          % [nT]
 environment.WMM.h = h;                          % [nT]
 
+environment.Fe=1358;                            % Solar Radiation 1AU [W/m2]
+environment.c= 299792458;                       % speed of light [m/s]
+environment.P=environment.Fe/environment.c;     % Solar pressure [N/m^2]
+
 % satellite parameters
 sat.m  = 720;                                   % Spacecraft mass [kg]
 sat.dipole = 3.5e-3*sat.m * ones(3,1);          % Spacecraft dipole moment [Am^2]
-sat.I = [279 945 1084]';                               % Column vector with Principal Inertia Moments
+sat.I = [279 945 1084]';                        % Column vector with Principal Inertia Moments
 theta = deg2rad(38.35);                         % angle between z_body and solar panel DA TROVARE SUL CAD[rad]
+beta = deg2rad(8.84);                           % angle between y_body and S/C sides DA TROVARE SUL CAD[rad]
 sat.panel1 = [0;-sin(theta);cos(theta)];        % normal to 1st solar panel in body frame
 sat.panel2 = [0;sin(theta);cos(theta)];         % normal to 2nd solar panel in body frame
+
+sat.panel1.vec = [0;-sin(theta);cos(theta)];    % normal to 1st solar panel in body frame
+sat.panel2.vec = [0;sin(theta);cos(theta)];     % normal to 2nd solar panel in body frame
+sat.base1.vec  = [1; 0; 0];
+sat.base2.vec  = -sat.base1.vec;
+sat.side3.vec  = [0; cos(beta); -sin(beta)];
+sat.side4.vec  = [0; 0; -1];
+sat.side5.vec  = [0; -cos(beta); -sin(beta)];
+
+sat.panel1.r = [0;-sqrt(2);sqrt(2)];     % vectors from centroide to CoG [m]
+sat.panel2.r = [0;sqrt(2);sqrt(2)];             
+sat.base1.r  = [2; 0; 0];
+sat.base2.r  = -sat.base1.r;
+sat.side3.r  = [0; 1.2; 0];
+sat.side4.r  = [0; 0; -0.9];
+sat.side5.r  = [0; -1.2; 0];
+
+sat.panel1.A = 5048400e-6;      % area of the panel [m^2]
+sat.panel2.A = sat.panel1.A;
+sat.base1.A = 2402565e-6;
+sat.base2.A = sat.base1.A;
+sat.side3.A = 2187269e-6;
+sat.side4.A = 7981554e-6;
+sat.side5.A = sat.side3.A;
+
+sat.rho_s.panel=0.1;    % reflectance coefficients
+sat.rho_s.side=0.5;
+sat.rho_d.panel=0.1;
+sat.rho_d.side=0.1;
 
 % sensor parameters
 load("star_catalogue.mat")                     
