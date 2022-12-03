@@ -26,7 +26,7 @@ settings.theta = 0;                         % true anomaly [rad] (assumed equal 
 settings.mu = astroConstants(13);           % Earth's planetary constant [km^3/s^2]
 
 [r0, v0] = kep2car(settings);    % initial position and velocity in inertial frame [km]
-settings.w0 = [0 0 0]';                % initial angular velocity in body frame [rad/s]
+settings.w0 = [0.2 0.2 0.2]';                % initial angular velocity in body frame [rad/s]
 settings.E0 = [0 0 0]';                % initial euler angles [rad]
 settings.q0 = [0 0 0 1]';              % initial estimamted quaternion [-]
 
