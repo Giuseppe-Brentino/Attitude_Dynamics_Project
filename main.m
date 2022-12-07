@@ -55,37 +55,27 @@ environment.P=environment.Fe/environment.c;     % Solar pressure [N/m^2]
 sat.m  = 720;                                   % Spacecraft mass [kg]
 sat.dipole = 3.5e-3*sat.m * ones(3,1);          % Spacecraft dipole moment [Am^2]
 sat.I = [279 945 1085]';                        % Column vector with Principal Inertia Moments
-theta = deg2rad(38.35);                         % angle between z_body and solar panel DA TROVARE SUL CAD[rad]
-beta = deg2rad(8.84);                           % angle between y_body and S/C sides DA TROVARE SUL CAD[rad]
-% normal to each surface in body frame
-sat.panel1.vec = [0;-sin(theta);cos(theta)];
-sat.panel2.vec = [0;sin(theta);cos(theta)]; 
-sat.base1.vec  = [1; 0; 0];
-sat.base2.vec  = [-1; 0; 0];
-sat.side3.vec  = [0; cos(beta); -sin(beta)];
-sat.side4.vec  = [0; 0; -1];
-sat.side5.vec  = [0; -cos(beta); -sin(beta)];
-% vectors from centroide to CoG [m]
-sat.panel1.r = [88; -611; 618]*1e-3;     
-sat.panel2.r = [88; -611; 618]*1e-3;             
-sat.base1.r  = [1802; 0; 152]*1e-3;
-sat.base2.r  = [-1715; 0; 152]*1e-3;
-sat.side3.r  = [90; 1113; -119]*1e-3;
-sat.side4.r  = [88; 0; -419]*1e-3;
-sat.side5.r  = [90; -1113; -119]*1e-3;
-% area of the panel [m^2]
-sat.panel1.A = 5048400e-6;      
-sat.panel2.A = sat.panel1.A;
-sat.base1.A = 2402565e-6;
-sat.base2.A = sat.base1.A;
-sat.side3.A = 2187269e-6;
-sat.side4.A = 7981554e-6;
-sat.side5.A = sat.side3.A;
+
 % reflectance coefficients
 sat.rho_s.panel=0.1;
 sat.rho_s.side=0.5;
 sat.rho_d.panel=0.1;
 sat.rho_d.side=0.1;
+alfa = deg2rad(38.35);                          % angle between z_body and solar panel [rad]
+beta = deg2rad(8.84);                           % angle between y_body and S/C sides [rad]
+sat.Normals = [-1     0          0       0     0       1     0;  ...      % normal versors to each surface in body frame
+                0 -sin(alfa) -cos(beta)  0  sin(alfa)  0   cos(beta); ...
+                0  cos(alfa) -sin(beta) -1  cos(alfa)  0  -sin(beta)];
+sat.rGC = 1e-3* [-1715    88    90   88   88  1802    90; ...   % vectors CoG to centroid of surfaces [m]
+                     0  -611 -1113    0  611     0  1113; ...
+                   152   618  -119 -419  618   152  -119];
+sat.Aree = 1e-6* [2402565 5048400 2187269 7981554 5048400 2402565 2187269];  % area of S/C surfaces [m^2]
+sat.rhos_panel=0.5;
+sat.rhod_panel=0.1;
+sat.rhos=0.1;
+sat.rhod=0.1;
+sat.panel1=sat.Normals(:,2);
+sat.panel2=sat.Normals(:,5);
 
 % sensor parameters
 load("star_catalogue.mat")                     
@@ -120,25 +110,14 @@ sensors.mag.sensitivity = 100*1e-6;                        % sensitivity [V/nT]
 sensors.mag.quant_V = 0.050;                                 % quantization interval [V]
 sensors.mag.quant_T = sensors.mag.quant_V/sensors.mag.sensitivity;      % quantization interval [nT]
 sensors.mag.frequency = 1/5;                                    % sample time [s]
-sensors.mag.angles.ax=deg2rad(0.5);
-sensors.mag.angles.ay=deg2rad(0.5);
-sensors.mag.angles.az=deg2rad(0.5);
-sensors.mag.angles.bx=deg2rad(10);
-sensors.mag.angles.by=deg2rad(20);
-sensors.mag.angles.bz=deg2rad(30);
+% magnetic sensor, non-orthogonality error
+ax=deg2rad(0.5); bx=deg2rad(10); % orientation of the non othogonal reference system of the magnetometers
+ay=deg2rad(0.5); by=deg2rad(20);
+az=deg2rad(0.5); bz=deg2rad(30);                           
 
-ax=sensors.mag.angles.ax;
-ay=sensors.mag.angles.ay;
-az=sensors.mag.angles.az;
-bx=sensors.mag.angles.bx;
-by=sensors.mag.angles.by;
-bz=sensors.mag.angles.bz;
-
-A_mag=[cos(ax) sin(ax)*cos(bx) sin(ax)*sin(bx);
-    sin(ay)*cos(by) cos(ay) sin(ay)*sin(by);
-    sin(az)*cos(bz) sin(az)*sin(bz) cos(az)];
-
-sensors.mag.A_mag = A_mag;
+sensors.mag.A_mag=[cos(ax) sin(ax)*cos(bx) sin(ax)*sin(bx);... % rotation and distortion matrix
+       sin(ay)*cos(by) cos(ay) sin(ay)*sin(by);...
+       sin(az)*cos(bz) sin(az)*sin(bz) cos(az)];    
 
 % actuator parameters
 thruster.thrust = 0.01;                                 % Nominal thrust [N]   
