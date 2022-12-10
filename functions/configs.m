@@ -62,10 +62,12 @@ sat.panel2=sat.Normals(:,5);
 % sensor parameters
 load("star_catalogue.mat")                     
 sensors.star.fov = 20;                           % nominal field of view [deg]
-sensors.star.alpha_err = (deg2rad(2/3600))^2;    % variance of alpha [rad]
-sensors.star.delta_err = (deg2rad(4.91/3600))^2; % variance of delta [rad]
+sensors.star.alpha_std = deg2rad(2/3600);    % standard deviation of alpha [rad]
+sensors.star.delta_std = deg2rad(4.91/3600); % standard deviation of delta [rad]
+sensors.star.alpha_err = sensors.star.alpha_std^2;    % variance of alpha [rad]
+sensors.star.delta_err = sensors.star.delta_std^2; % variance of delta [rad]
 sensors.star.frequency = 1;                      % maximum update rate [Hz]
-sensors.star.inclination = deg2rad(15);          % inclination of the sensor wrt z_body axis [rad]
+sensors.star.inclination = deg2rad(68.7);          % inclination of the sensor wrt z_body axis [rad]
 sensors.star.focal_length = 20;                  % focal length of the sensor [mm]
 sensors.star.pixel = sensors.star.focal_length...% pixel length [mm]
     *tan(deg2rad(sensors.star.fov/2))/512;
