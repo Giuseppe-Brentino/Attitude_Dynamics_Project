@@ -1,12 +1,12 @@
-function J = fitnessfcn(X,A,B,final_w,high_torque,Ts,sat,settings)
-
-A_tot = A + X(1)*eye(3);
-Q = diag(X(2)*ones(3,1));
-R = diag(X(3)*ones(3,1));
-k = lqr(A_tot,B,Q,R);
-test = sim("controlTuning.slx",'SrcWorkspace','Current');
+function J = fitnessfcn(X, n)
 
 
-max_torque = max(max(abs(test.torque)));
 
-J = 1/2  * 5 * ( (test.w(end,:)-final_w')*(test.w(end,:)'-final_w) ) + 1/2 * 1 * (max_torque-high_torque)^2;
+test = sim("PE_test.slx");
+w = reshape(test.w', [1, size(test.w, 1)*size(test.w, 2)]);
+w_ref = zeros(1, length(w));
+w_ref(2:3:end) = n;
+q = reshape(test.q_e', [1, size(test.q_e, 1)*size(test.q_e, 2)]);
+Mc = reshape(test.Mc', [1, size(test.Mc, 1)*size(test.Mc, 2)]);
+
+J = 1/2  * ( )^2;
