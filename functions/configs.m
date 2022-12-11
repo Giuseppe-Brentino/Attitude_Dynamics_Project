@@ -114,12 +114,12 @@ thruster.firing_time = 0.05;                            % Minimum firing time [s
 magnetorquers.dipole = 30;                              % Maximum magnetic dipole [Am^2] da datsheet (attuatore su eoportal)
 
 % Kalman filter
-kalman.Q = diag(0.01*ones(3,1));                         % measure noise
+kalman.Q = diag(1*ones(3,1));                         % measure noise
 kalman.R = diag(1*ones(3,1));                         % model noise
 kalman.P = diag(0.1*ones(3,1));                         % covariance matrix
 kalman.u = zeros(3, 1);                                 % initial control value
 kalman.frequency = 5;
-kalman.B = diag(1./sat.I)*1/kalman.frequency;
+kalman.B = diag(1./sat.I)*1/sensors.star.frequency;
 kalman.w0 = zeros(3,1);
 
 % test = sim("orbit_propagation.slx");

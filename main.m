@@ -21,7 +21,6 @@ configs;
 settings.w0 = sqrt(settings.mu/settings.a^3)*[0 1 0]';     % initial angular velocity in body frame [rad/s]
 
 % initial attitude
-% A_BN0 = [v0'/norm(v0); (cross(r0, v0))'/norm(cross(r0, v0)); r0'/norm(r0)];
 h0=cross(r0,v0);
 A_BN0 = [cross(-r0',h0')/norm(cross(r0,h0)); h0'/norm(h0); r0'/norm(r0)];
 
