@@ -93,7 +93,7 @@ sensors.mag.variance = (sensors.mag.STD_dev)^2;            % variance
 sensors.mag.sensitivity = 100*1e3;                        % sensitivity [V/T]
 sensors.mag.quant_V = 0.050;                                 % quantization interval [V]
 sensors.mag.quant_T = sensors.mag.quant_V/sensors.mag.sensitivity;      % quantization interval [T]
-sensors.mag.frequency = 1/5;                                    % sample time [s]
+sensors.mag.frequency = 5;                                    % update rate [Hz]
 % magnetic sensor, non-orthogonality error
 ax=deg2rad(0.5); bx=deg2rad(10); % orientation of the non othogonal reference system of the magnetometers
 ay=deg2rad(0.5); by=deg2rad(20);
