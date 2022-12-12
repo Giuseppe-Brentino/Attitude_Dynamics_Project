@@ -86,13 +86,13 @@ sensors.star.reduced_perf_w = deg2rad(1.5);
 % magnetic sensor parameters
 sensors.mag.acc = 0.5*1e-2;                              % accuracy percentage of full scale
 sensors.mag.lin = 0.015*1e-2;                            % linearity percentage of full scale
-sensors.mag.FMR = 100*1e3;                                 % field measurement of range [nT]
+sensors.mag.FMR = 100*1e-6;                                 % field measurement of range [T]
 sensors.mag.STD_dev = sqrt( (sensors.mag.acc/(sqrt(3)))^2 ...
     + (sensors.mag.lin/(sqrt(3)))^2 )*sensors.mag.FMR;        % standard deviation 
 sensors.mag.variance = (sensors.mag.STD_dev)^2;            % variance 
-sensors.mag.sensitivity = 100*1e-6;                        % sensitivity [V/nT]
+sensors.mag.sensitivity = 100*1e3;                        % sensitivity [V/T]
 sensors.mag.quant_V = 0.050;                                 % quantization interval [V]
-sensors.mag.quant_T = sensors.mag.quant_V/sensors.mag.sensitivity;      % quantization interval [nT]
+sensors.mag.quant_T = sensors.mag.quant_V/sensors.mag.sensitivity;      % quantization interval [T]
 sensors.mag.frequency = 1/5;                                    % sample time [s]
 % magnetic sensor, non-orthogonality error
 ax=deg2rad(0.5); bx=deg2rad(10); % orientation of the non othogonal reference system of the magnetometers
@@ -112,6 +112,7 @@ thruster.position = ones(3,8);                          % Thruster position wrt 
 thruster.firing_time = 0.05;                            % Minimum firing time [s]
 
 magnetorquers.dipole = 30;                              % Maximum magnetic dipole [Am^2] da datsheet (attuatore su eoportal)
+magnetorquers.k_b = 1e9*[4 4 3]';
 
 % Kalman filter
 kalman.Q = diag(0.0000001*ones(3,1));                         % measure noise

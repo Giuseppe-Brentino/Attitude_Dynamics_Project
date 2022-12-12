@@ -18,7 +18,7 @@ addpath('./functions/');
 
 configs;
 
-settings.w0 = sqrt(settings.mu/settings.a^3)*[0 1 0]';     % initial angular velocity in body frame [rad/s]
+settings.w0 = [0.035 0.035 0.035]';     % initial angular velocity in body frame [rad/s] = 2 deg/s
 
 % initial attitude
 h0=cross(r0,v0);
