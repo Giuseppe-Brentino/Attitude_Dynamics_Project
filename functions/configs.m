@@ -9,6 +9,8 @@ settings.theta = 0;                         % true anomaly [rad] (assumed equal 
 
 settings.mu = astroConstants(13);           % Earth's planetary constant [km^3/s^2]
 
+n = [0; sqrt(settings.mu/settings.a^3); 0];
+
 [r0, v0] = kep2car(settings);    % initial position and velocity in inertial frame [km]
 
 
