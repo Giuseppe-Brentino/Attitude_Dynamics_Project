@@ -9,7 +9,7 @@ addpath('../functions/');
 configs;
 
 %% Nadir pointing
-w0 = [1e-2 1e-2 1e-2]';                % initial angular velocity in body frame [rad/s]
+w0 = [2e-2 2e-2 2e-2]';                % initial angular velocity in body frame [rad/s]
 
 % initial attitude
 A_BN0 = [v0'/norm(v0); (cross(r0, v0))'/norm(cross(r0, v0)); r0'/norm(r0)];
