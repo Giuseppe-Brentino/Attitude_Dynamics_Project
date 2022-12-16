@@ -15,8 +15,8 @@ n = [0; sqrt(settings.mu/settings.a^3); 0];
 
 
 settings.N = 13;                 % order of the magnetic field model [-]
-% environment parameters
 
+% environment parameters
 environment.E_w =  deg2rad(15.04/3600);         % Earth's angular velocity around it's axis [rad/s]
 environment.theta_G0 = 0;                       % Initial Greenwich Meridian Longitude [rad] (mezzanotte 21Settembre)
 environment.theta_E0 = 0;                       % Initial Earth longitude wrt the sun [rad]  (DA CAMBIARE)
@@ -69,7 +69,8 @@ sensors.star.delta_std = deg2rad(4.91/3600); % standard deviation of delta [rad]
 sensors.star.alpha_err = sensors.star.alpha_std^2;    % variance of alpha [rad]
 sensors.star.delta_err = sensors.star.delta_std^2; % variance of delta [rad]
 sensors.star.frequency = 1;                      % maximum update rate [Hz]
-sensors.star.inclination = deg2rad(68.7);          % inclination of the sensor wrt z_body axis [rad]
+% sensors.star.inclination = deg2rad(68.7);          % inclination of the sensor wrt z_body axis [rad]
+sensors.star.inclination = deg2rad(75);
 sensors.star.focal_length = 20;                  % focal length of the sensor [mm]
 sensors.star.pixel = sensors.star.focal_length...% pixel length [mm]
     *tan(deg2rad(sensors.star.fov/2))/512;
@@ -113,8 +114,20 @@ thruster.direction = [ 0  0  0  0  0  0  0  0; ...      % Direction in which the
 thruster.position = ones(3,8);                          % Thruster position wrt center of mass [m]
 thruster.firing_time = 0.05;                            % Minimum firing time [s]
 
-magnetorquers.dipole = 30;                              % Maximum magnetic dipole [Am^2] da datsheet (attuatore su eoportal)
-magnetorquers.k_b = 1e9*[4 4 3]';
+magnetorquers.dipole = 80;                              % Maximum magnetic dipole [Am^2] da datsheet (attuatore su eoportal)
+
+% Control
+% bdot
+bdot_gain = 1e8*[4 4 3]';
+% lqr
+load("LQR_Data4.mat")
+A = [                    0            0     ( sat.I(2)-sat.I(3) )/sat.I(1)*n(2);...
+                         0            0                       0;...
+     ( sat.I(1)-sat.I(2) )/sat.I(3)*n(2) 0                       0 ] + X(1)*eye(3);
+B = diag([1/sat.I(1) 1/sat.I(2) 1/sat.I(3)]);
+R = diag(X(3)*ones(3,1));
+Q = diag(X(2)*ones(3,1));
+[lqr_gain,s,clp] = lqr(A,B,Q,R);
 
 % Kalman filter
 kalman.Q = diag(0.0000001*ones(3,1));                         % measure noise

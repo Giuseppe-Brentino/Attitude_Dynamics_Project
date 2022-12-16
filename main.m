@@ -14,11 +14,15 @@ clearvars; close all; clc;
 addpath('./subsystems/');
 addpath('./data/');
 addpath('./functions/');
+addpath('./Control validation/');
 
 
 configs;
 
-settings.w0 = [0.035 0.035 0.035]';     % initial angular velocity in body frame [rad/s] = 2 deg/s
+% settings.w0 = [0.035 0.035 0.035]';     % initial angular velocity in body frame [rad/s] = 2 deg/s
+% settings.w0 = sqrt(settings.mu/settings.a^3)*[0 1 0]';  
+settings.w0 = [0.0524, 0.0524, 0.0524]';
+% settings.w0 = [0.005 0.005 0.005]';
 
 % initial attitude
 h0=cross(r0,v0);
