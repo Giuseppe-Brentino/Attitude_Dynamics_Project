@@ -19,10 +19,11 @@ addpath('./Control validation/');
 
 configs;
 
+settings.w0 = [0.0524, 0.0524, 0.0524]';  % detumbling initial angular velocity in body frame [rad/s] = 3 deg/s
 % settings.w0 = [0.035 0.035 0.035]';     % initial angular velocity in body frame [rad/s] = 2 deg/s
-% settings.w0 = sqrt(settings.mu/settings.a^3)*[0 1 0]';  
-settings.w0 = [0.0524, 0.0524, 0.0524]';
-% settings.w0 = [0.005 0.005 0.005]';
+% settings.w0 = [0.005 0.005 0.005]';     % initial angular velocity in body frame [rad/s] = 0.3 deg/s
+% settings.w0 = n;                        % star tracker test angular velocity
+% settings.w0 = [deg2rad(1), n(2), 0];
 
 % initial attitude
 h0=cross(r0,v0);

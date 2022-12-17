@@ -45,7 +45,7 @@ sat.rho_s.panel=0.1;
 sat.rho_s.side=0.5;
 sat.rho_d.panel=0.1;
 sat.rho_d.side=0.1;
-alfa = deg2rad(38.35);                          % angle between z_body and solar panel [rad]
+alfa = deg2rad(38.35);                          % angle between z_body and normal to solar panel [rad]
 beta = deg2rad(8.84);                           % angle between y_body and S/C sides [rad]
 sat.Normals = [-1     0          0       0     0       1     0;  ...      % normal versors to each surface in body frame
                 0 -sin(alfa) -cos(beta)  0  sin(alfa)  0   cos(beta); ...
@@ -69,15 +69,15 @@ sensors.star.delta_std = deg2rad(4.91/3600); % standard deviation of delta [rad]
 sensors.star.alpha_err = sensors.star.alpha_std^2;    % variance of alpha [rad]
 sensors.star.delta_err = sensors.star.delta_std^2; % variance of delta [rad]
 sensors.star.frequency = 1;                      % maximum update rate [Hz]
-% sensors.star.inclination = deg2rad(68.7);          % inclination of the sensor wrt z_body axis [rad]
-sensors.star.inclination = deg2rad(75);
+% sensors.star.inclination = deg2rad(68.7);          % inclination of the normal of the sensor wrt z_body axis [rad]
+sensors.star.inclination = deg2rad(75);          % inclination of the normal of the sensor wrt z_body axis [rad]
 sensors.star.focal_length = 20;                  % focal length of the sensor [mm]
 sensors.star.pixel = sensors.star.focal_length...% pixel length [mm]
     *tan(deg2rad(sensors.star.fov/2))/512;
-theta = pi/2 - sensors.star.inclination;
 sensors.star.S = zeros(4, 10);  
 sensors.star.alpha = zeros (10, 1); 
 sensors.star.delta = zeros (10, 1); 
+theta = sensors.star.inclination;
 sensors.star.ASB1 = [ 1       0          0; ...         % rotation matrix body to sensor 1
                       0  cos(theta)  sin(theta); ...
                       0  -sin(theta) cos(theta)];
@@ -86,25 +86,27 @@ sensors.star.ASB2 = [ 1       0          0; ...
                       0  -sin(-theta)  cos(-theta)];
 sensors.star.opt_w = deg2rad(0.3);
 sensors.star.reduced_perf_w = deg2rad(1.5);
+alfa1 = sensors.star.inclination - alfa - deg2rad(sensors.star.fov/2);   % lower angle between solar panel normal and star tracker normal 
+                                                                         % such that sun is in fov of star tracker 
+alfa2 = sensors.star.inclination - alfa + deg2rad(sensors.star.fov/2);   % greater angle between solar panel normal and star tracker normal
+                                                                         % such that sun is in fov of star tracker 
 % magnetic sensor parameters
-sensors.mag.acc = 0.5*1e-2;                              % accuracy percentage of full scale
-sensors.mag.lin = 0.015*1e-2;                            % linearity percentage of full scale
+sensors.mag.acc = 0.5;                              % accuracy percentage of full scale
+sensors.mag.lin = 0.015;                            % linearity percentage of full scale
 sensors.mag.FMR = 100*1e-6;                                 % field measurement of range [T]
-sensors.mag.STD_dev = sqrt( (sensors.mag.acc/(sqrt(3)))^2 ...
-    + (sensors.mag.lin/(sqrt(3)))^2 )*sensors.mag.FMR;        % standard deviation 
-sensors.mag.variance = (sensors.mag.STD_dev)^2;            % variance 
-sensors.mag.sensitivity = 100*1e3;                        % sensitivity [V/T]
+sensors.mag.STD_dev = sqrt( sensors.mag.acc^2 + ...
+    sensors.mag.lin^2 ) / sqrt(3) /100 * sensors.mag.FMR;  % standard deviation 
+sensors.mag.variance = sensors.mag.STD_dev^2;              % variance 
+sensors.mag.sensitivity = 100*1e3;                         % sensitivity [V/T]
 sensors.mag.quant_V = 0.050;                                 % quantization interval [V]
 sensors.mag.quant_T = sensors.mag.quant_V/sensors.mag.sensitivity;      % quantization interval [T]
 sensors.mag.frequency = 5;                                    % update rate [Hz]
 % magnetic sensor, non-orthogonality error
-ax=deg2rad(0.5); bx=deg2rad(10); % orientation of the non othogonal reference system of the magnetometers
-ay=deg2rad(0.5); by=deg2rad(20);
-az=deg2rad(0.5); bz=deg2rad(30);                           
-
-sensors.mag.A_mag=[cos(ax) sin(ax)*cos(bx) sin(ax)*sin(bx);... % rotation and distortion matrix
-       sin(ay)*cos(by) cos(ay) sin(ay)*sin(by);...
-       sin(az)*cos(bz) sin(az)*sin(bz) cos(az)];    
+a = deg2rad(rand([3,1])*0.5); % orientation of the non othogonal reference system of the magnetometers [rad]
+b = deg2rad(rand([3,1])*360);                           
+sensors.mag.A_mag=[cos(a(1)) sin(a(1))*cos(b(1)) sin(a(1))*sin(b(1));... % rotation and distortion matrix
+       sin(a(2))*cos(b(2)) cos(a(2)) sin(a(2))*sin(b(2));...
+       sin(a(3))*cos(b(3)) sin(a(3))*sin(b(3)) cos(a(3))];    
 
 % actuator parameters
 thruster.thrust = 0.01;                                 % Nominal thrust [N]   
