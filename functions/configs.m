@@ -7,16 +7,16 @@ settings.OM = deg2rad(315.709234758653);    % RAAN [rad]
 settings.om = deg2rad(101.432935891144);    % pericenter's anomaly [rad]
 settings.theta = 0;                         % true anomaly [rad] (assumed equal to zero)
 
-settings.mu = astroConstants(13);           % Earth's planetary constant [km^3/s^2]
-
-n = [0; sqrt(settings.mu/settings.a^3); 0];
+settings.mu = astroConstants(13);                       % Earth's planetary constant [km^3/s^2]
+settings.Time = 2*pi*sqrt(settings.a^3/settings.mu);    % Orbital period [s]
+settings.n = [0; sqrt(settings.mu/settings.a^3); 0];
 
 [r0, v0] = kep2car(settings);    % initial position and velocity in inertial frame [km]
 
 
 settings.N = 13;                 % order of the magnetic field model [-]
 
-% environment parameters
+%% environment parameters
 environment.E_w =  deg2rad(15.04/3600);         % Earth's angular velocity around it's axis [rad/s]
 environment.theta_G0 = 0;                       % Initial Greenwich Meridian Longitude [rad] (mezzanotte 21Settembre)
 environment.theta_E0 = 0;                       % Initial Earth longitude wrt the sun [rad]  (DA CAMBIARE)
@@ -35,7 +35,7 @@ environment.Fe=1358;                            % Solar Radiation 1AU [W/m2]
 environment.c= 299792458;                       % speed of light [m/s]
 environment.P=environment.Fe/environment.c;     % Solar pressure [N/m^2]
 
-% satellite parameters
+%% satellite parameters
 sat.m  = 720;                                   % Spacecraft mass [kg]
 sat.dipole = 3.5e-3*sat.m * ones(3,1);          % Spacecraft dipole moment [Am^2]
 sat.I = [279 945 1085]';                        % Column vector with Principal Inertia Moments
@@ -61,7 +61,7 @@ sat.rhod=0.1;
 sat.panel1=sat.Normals(:,2);
 sat.panel2=sat.Normals(:,5);
 
-% sensor parameters
+%% sensor parameters
 load("star_catalogue.mat")                     
 sensors.star.fov = 20;                           % nominal field of view [deg]
 sensors.star.alpha_std = deg2rad(2/3600);    % standard deviation of alpha [rad]
@@ -110,20 +110,17 @@ sensors.mag.A_mag=[cos(a(1)) sin(a(1))*cos(b(1)) sin(a(1))*sin(b(1));... % rotat
        sin(a(2))*cos(b(2)) cos(a(2)) sin(a(2))*sin(b(2));...
        sin(a(3))*cos(b(3)) sin(a(3))*sin(b(3)) cos(a(3))];    
 
-% actuator parameters
-thruster.thrust = 0.01;                                 % Nominal thrust [N]   
-thruster.direction = [ 0  0  0  0  0  0  0  0; ...      % Direction in which the thrust is applied
-                       0  0  0  0  1 -1 -1  1; ...
-                       1 -1  1 -1  0  0  0  0; ]; 
-thruster.position = ones(3,8);                          % Thruster position wrt center of mass [m]
-thruster.firing_time = 0.05;                            % Minimum firing time [s]
-
+%% actuators
 magnetorquers.dipole = 120;                              % Maximum magnetic dipole [Am^2] da datsheet (attuatore su eoportal)
 
-% Control
-% bdot
-control.bdot_gain = 1e7*sat.I;
-control.bdot_end = 0.015;
-control.bdot_flag = true;
+%% Control
 
+control.bdot_gain = 1e7*sat.I;
+control.bdot_end = 0.01;
+control.bdot_flag = true;
+control.bdot_filter = 0.5;
+
+control.pointing_toll = deg2rad(0.2);
+control.pointing_Kp = -sat.I(3)/sat.I(1)*[1 1 1];
+control.pointing_Kd = 0.5*sat.I .* [1 1 1]';
 % test = sim("orbit_propagation.slx");
