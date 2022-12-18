@@ -90,6 +90,8 @@ alfa1 = sensors.star.inclination - alfa - deg2rad(sensors.star.fov/2);   % lower
                                                                          % such that sun is in fov of star tracker 
 alfa2 = sensors.star.inclination - alfa + deg2rad(sensors.star.fov/2);   % greater angle between solar panel normal and star tracker normal
                                                                          % such that sun is in fov of star tracker 
+sensors.star.startup = 1800;                        % seconds after which it's possible to use the star sensor
+
 % magnetic sensor parameters
 sensors.mag.acc = 0.5;                              % accuracy percentage of full scale
 sensors.mag.lin = 0.015;                            % linearity percentage of full scale
@@ -116,28 +118,12 @@ thruster.direction = [ 0  0  0  0  0  0  0  0; ...      % Direction in which the
 thruster.position = ones(3,8);                          % Thruster position wrt center of mass [m]
 thruster.firing_time = 0.05;                            % Minimum firing time [s]
 
-magnetorquers.dipole = 80;                              % Maximum magnetic dipole [Am^2] da datsheet (attuatore su eoportal)
+magnetorquers.dipole = 120;                              % Maximum magnetic dipole [Am^2] da datsheet (attuatore su eoportal)
 
 % Control
 % bdot
-bdot_gain = 1e8*[4 4 3]';
-% lqr
-load("LQR_Data4.mat")
-A = [                    0            0     ( sat.I(2)-sat.I(3) )/sat.I(1)*n(2);...
-                         0            0                       0;...
-     ( sat.I(1)-sat.I(2) )/sat.I(3)*n(2) 0                       0 ] + X(1)*eye(3);
-B = diag([1/sat.I(1) 1/sat.I(2) 1/sat.I(3)]);
-R = diag(X(3)*ones(3,1));
-Q = diag(X(2)*ones(3,1));
-[lqr_gain,s,clp] = lqr(A,B,Q,R);
-
-% Kalman filter
-kalman.Q = diag(0.0000001*ones(3,1));                         % measure noise
-kalman.R = diag(1*ones(3,1));                         % model noise
-kalman.P = diag(0.1*ones(3,1));                         % covariance matrix
-kalman.u = zeros(3, 1);                                 % initial control value
-kalman.frequency = 1;
-kalman.B = diag(1./sat.I)*1/sensors.star.frequency;
-kalman.w0 = [0 0.001 0]';
+control.bdot_gain = 1e7*sat.I;
+control.bdot_end = 0.015;
+control.bdot_flag = true;
 
 % test = sim("orbit_propagation.slx");

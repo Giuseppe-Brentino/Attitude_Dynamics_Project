@@ -2,7 +2,7 @@ clearvars; close all; clc;
 
 addpath('..\functions\');
 addpath('..\data\');
-addpath('..\functions\');
+addpath('..\subsystems\');
 
 configs;
 
@@ -19,6 +19,7 @@ A_BN0 = [cross(-r0',h0')/norm(cross(r0,h0)); h0'/norm(h0); r0'/norm(r0)];
 [E1, E2, E3] = dcm2angle(A_BN0, "ZXY");
 settings.E0 = [E1 E2 E3]';
 
-% B_dot
+%% B_dot
 k_b = 1e9;
+
 
