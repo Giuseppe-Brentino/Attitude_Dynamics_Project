@@ -19,11 +19,7 @@ addpath('./Control validation/');
 
 configs;
 
-settings.w0 = [1e-2, 1e-2, 1e-2]';  % detumbling initial angular velocity in body frame [rad/s] = 3 deg/s
-% settings.w0 = [0.035 0.035 0.035]';     % initial angular velocity in body frame [rad/s] = 2 deg/s
-% settings.w0 = [0.005 0.005 0.005]';     % initial angular velocity in body frame [rad/s] = 0.3 deg/s
-% settings.w0 = n;                        % star tracker test angular velocity
-% settings.w0 = [deg2rad(1), n(2), 0];
+settings.w0 = [1e-2,1e-2,1e-2]';  % detumbling initial angular velocity in body frame [rad/s] = 3 deg/s
 
 % initial attitude
 h0=cross(r0,v0);
@@ -40,6 +36,7 @@ q2 = 1/(4*q4) * (A_BN0(3, 1) - A_BN0(1, 3));
 q3 = 1/(4*q4) * (A_BN0(1, 2) - A_BN0(2, 1));
 
 [E1, E2, E3] = dcm2angle(A_BN0, "ZXY");
+A_BN0 = angle2dcm(E1+0.7,E2+0.4,E3-1);
 
-settings.E0 = [E1 E2 E3]';                % initial euler angles [rad]
+settings.E0 = [E1+0.7 E2+0.4 E3-1]';                % initial euler angles [rad]
 settings.q0 = [q1 q2 q3 q4]';             % initial estimamted quaternion [-]

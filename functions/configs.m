@@ -111,16 +111,31 @@ sensors.mag.A_mag=[cos(a(1)) sin(a(1))*cos(b(1)) sin(a(1))*sin(b(1));... % rotat
        sin(a(3))*cos(b(3)) sin(a(3))*sin(b(3)) cos(a(3))];    
 
 %% actuators
-magnetorquers.dipole = 120;                              % Maximum magnetic dipole [Am^2] da datsheet (attuatore su eoportal)
+magnetorquers.dipole = 300;                             % Maximum magnetic dipole [Am^2] da datsheet (attuatore su eoportal)
+
+thruster.thrust = 0.01;                                 % Nominal thrust [N]   
+thruster.direction = [ 0  0  0  0;   ...                % Direction in which the thrust is applied
+                       0  0  0  0;   ...
+                       1 -1  1 -1 ]; 
+thruster.position = [ 0.3  0.3   -1.7    -1.7;   ...    % Thruster position wrt center of mass [m]
+                     -1.05  1.05  1.1    -1.1;   ...
+                      0.3  -0.3   0.195  -0.195  ];
+thruster.firing_time = 0.05;                            % Minimum firing time [s]
 
 %% Control
-
+control.frequency = 20;                  %[Hz]
 control.bdot_gain = 1e7*sat.I;
 control.bdot_end = 0.01;
-control.bdot_flag = true;
+control.bdot_flag = false;
 control.bdot_filter = 0.5;
 
-control.pointing_toll = deg2rad(0.2);
+control.pointing_toll = deg2rad(5);
 control.pointing_Kp = -sat.I(3)/sat.I(1)*[1 1 1];
 control.pointing_Kd = 0.5*sat.I .* [1 1 1]';
-% test = sim("orbit_propagation.slx");
+
+thruster.K_e = 47;
+thruster.K_m = 40;
+thruster.T_m = 20;
+thruster.Uon = 19;
+thruster.Uoff = 18.9;
+
