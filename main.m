@@ -36,8 +36,8 @@ q3 = 1/(4*q4) * (A_BN0(1, 2) - A_BN0(2, 1));
 
 [E1, E2, E3] = dcm2angle(A_BN0, "ZXY");
 % A_BN0 = angle2dcm(E1,E2,E3);
-A0 = angle2dcm(E1-0.5,E2+0.8,E3+0.3,'ZXY');
+A0 = angle2dcm(wrapToPi(E1+0.9),wrapToPi(E2+1.01),wrapToPi(E3-0.6),'ZXY');
 
 
-settings.E0 = [E1-0.5,E2+0.8,E3+0.3]';                % initial euler angles [rad]
+settings.E0 = [wrapToPi(E1+0.9),wrapToPi(E2+1.01),wrapToPi(E3-0.6)]';                % initial euler angles [rad]
 settings.q0 = [q1 q2 q3 q4]';             % initial estimamted quaternion [-]

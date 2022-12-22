@@ -17,9 +17,9 @@ n = sqrt(settings.mu/settings.a^3);
 [E1,E2,E3] = dcm2angle(A_BN0,'ZXY');
 A0 = angle2dcm(E1-0.5,E2+0.8,E3+0.3,'ZXY');
 
-K_w = 1e-2;
-K_cz = [1 1 1]; %sat.I/sat.I(3)*1e-4;
-K_cx = [1 1 1]; %sat.I/sat.I(3)*1e-4;
+% K_w = 1e-2;
+% K_cz = [1 1 1]; %sat.I/sat.I(3)*1e-4;
+% K_cx = [1 1 1]; %sat.I/sat.I(3)*1e-4;
 
 thruster.K_e = 47;
 thruster.K_m = 40;
