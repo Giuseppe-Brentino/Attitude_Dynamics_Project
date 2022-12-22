@@ -27,15 +27,9 @@ thruster.T_m = 20;
 thruster.Uon = 19;
 thruster.Uoff = 18.9;
 
-% sys = tf([thruster.K_m],[thruster.T_m 1]);
-% sys = c2d(sys,0.05);
-% num = sys.Numerator{1}
-% den = sys.Denominator{1}
-
-% %% GA
-% ub = [100, 500]; % [K_m, T_m]
-% lb = [0 0];
-% 
-% options = optimoptions('ga','PlotFcn','gaplotbestf','UseParallel', true, 'UseVectorized', false, 'PopulationSize', 100);
-% X = ga(@(X)fitnessfcn(X,settings,sat,environment,thruster,n,r0,v0,A0,A_BN0),2,[],[],[],[],lb,ub,[],[],options);
-% save Pointing_gains X
+q4 = 0.5*sqrt(1 + A_BN0(1, 1) + A_BN0(2, 2) + A_BN0(3, 3));
+q1 = 1/(4*q4) * (A_BN0(2, 3) - A_BN0(3, 2));
+q2 = 1/(4*q4) * (A_BN0(3, 1) - A_BN0(1, 3));
+q3 = 1/(4*q4) * (A_BN0(1, 2) - A_BN0(2, 1));
+settings.q0 = [q1 q2 q3 q4]';             % initial estimamted quaternion [-]
+settings.E0 = [E1-0.5,E2+0.8,E3+0.3]';                % initial euler angles [rad]

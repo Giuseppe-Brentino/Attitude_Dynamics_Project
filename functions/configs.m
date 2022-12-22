@@ -1,5 +1,5 @@
 % initial attitude and position conditions (Ephemeris 00:00:00 27-10-2022)
-
+rng('default');
 settings.a = 7099.67959313555;              % major semi-axis [km] 
 settings.e = 0.00117256328941186;           % eccentricity [-]
 settings.i = deg2rad(91.9344391020783);     % inclination [rad]
@@ -9,7 +9,7 @@ settings.theta = 0;                         % true anomaly [rad] (assumed equal 
 
 settings.mu = astroConstants(13);                       % Earth's planetary constant [km^3/s^2]
 settings.Time = 2*pi*sqrt(settings.a^3/settings.mu);    % Orbital period [s]
-settings.n = [0; sqrt(settings.mu/settings.a^3); 0];
+n = sqrt(settings.mu/settings.a^3);
 
 [r0, v0] = kep2car(settings);    % initial position and velocity in inertial frame [km]
 
@@ -111,7 +111,7 @@ sensors.mag.A_mag=[cos(a(1)) sin(a(1))*cos(b(1)) sin(a(1))*sin(b(1));... % rotat
        sin(a(3))*cos(b(3)) sin(a(3))*sin(b(3)) cos(a(3))];    
 
 %% actuators
-magnetorquers.dipole = 300;                             % Maximum magnetic dipole [Am^2] da datsheet (attuatore su eoportal)
+magnetorquers.dipole = 350;                             % Maximum magnetic dipole [Am^2] da datsheet (attuatore su eoportal)
 
 thruster.thrust = 0.01;                                 % Nominal thrust [N]   
 thruster.direction = [ 0  0  0  0;   ...                % Direction in which the thrust is applied
