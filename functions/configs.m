@@ -1,5 +1,11 @@
-% initial attitude and position conditions (Ephemeris 00:00:00 27-10-2022)
+
 rng('default');
+
+plot_style;
+
+Simtime = 50000;            % Maximum simulation time [s]
+% initial attitude and position conditions (Ephemeris 00:00:00 27-10-2022)
+
 settings.a = 7099.67959313555;              % major semi-axis [km] 
 settings.e = 0.00117256328941186;           % eccentricity [-]
 settings.i = deg2rad(91.9344391020783);     % inclination [rad]
@@ -9,7 +15,7 @@ settings.theta = 0;                         % true anomaly [rad] (assumed equal 
 
 settings.mu = astroConstants(13);                       % Earth's planetary constant [km^3/s^2]
 settings.Time = 2*pi*sqrt(settings.a^3/settings.mu);    % Orbital period [s]
-n = sqrt(settings.mu/settings.a^3);
+n = sqrt(settings.mu/settings.a^3);                     % Mean nominal angular velocity [rad/s]
 
 [r0, v0] = kep2car(settings);    % initial position and velocity in inertial frame [km]
 
@@ -63,16 +69,15 @@ sat.panel2=sat.Normals(:,5);
 
 %% sensor parameters
 load("star_catalogue.mat")                     
-sensors.star.fov = 20;                           % nominal field of view [deg]
-sensors.star.alpha_std = deg2rad(2/3600);    % standard deviation of alpha [rad]
-sensors.star.delta_std = deg2rad(4.91/3600); % standard deviation of delta [rad]
-sensors.star.alpha_err = sensors.star.alpha_std^2;    % variance of alpha [rad]
-sensors.star.delta_err = sensors.star.delta_std^2; % variance of delta [rad]
-sensors.star.frequency = 1;                      % maximum update rate [Hz]
-% sensors.star.inclination = deg2rad(68.7);          % inclination of the normal of the sensor wrt z_body axis [rad]
-sensors.star.inclination = deg2rad(75);          % inclination of the normal of the sensor wrt z_body axis [rad]
-sensors.star.focal_length = 20;                  % focal length of the sensor [mm]
-sensors.star.pixel = sensors.star.focal_length...% pixel length [mm]
+sensors.star.fov = 20;                               % nominal field of view [deg]
+sensors.star.alpha_std = deg2rad(2/3600);            % standard deviation of alpha [rad]
+sensors.star.delta_std = deg2rad(4.91/3600);         % standard deviation of delta [rad]
+sensors.star.alpha_err = sensors.star.alpha_std^2;   % variance of alpha [rad]
+sensors.star.delta_err = sensors.star.delta_std^2;   % variance of delta [rad]
+sensors.star.frequency = 1;                          % maximum update rate [Hz]
+sensors.star.inclination = deg2rad(75);              % inclination of the normal of the sensor wrt z_body axis [rad]
+sensors.star.focal_length = 20;                      % focal length of the sensor [mm]
+sensors.star.pixel = sensors.star.focal_length...    % pixel length [mm]
     *tan(deg2rad(sensors.star.fov/2))/512;
 sensors.star.S = zeros(4, 10);  
 sensors.star.alpha = zeros (10, 1); 
@@ -103,15 +108,16 @@ sensors.mag.sensitivity = 100*1e3;                         % sensitivity [V/T]
 sensors.mag.quant_V = 0.050;                                 % quantization interval [V]
 sensors.mag.quant_T = sensors.mag.quant_V/sensors.mag.sensitivity;      % quantization interval [T]
 sensors.mag.frequency = 5;                                    % update rate [Hz]
-% magnetic sensor, non-orthogonality error
+
+% magnetic sensos's non-orthogonality error
 a = deg2rad(rand([3,1])*0.5); % orientation of the non othogonal reference system of the magnetometers [rad]
 b = deg2rad(rand([3,1])*360);                           
 sensors.mag.A_mag=[cos(a(1)) sin(a(1))*cos(b(1)) sin(a(1))*sin(b(1));... % rotation and distortion matrix
        sin(a(2))*cos(b(2)) cos(a(2)) sin(a(2))*sin(b(2));...
        sin(a(3))*cos(b(3)) sin(a(3))*sin(b(3)) cos(a(3))];    
 
+clear a b alfa beta theta
 %% actuators
-magnetorquers.dipole = 350;                             % Maximum magnetic dipole [Am^2] da datsheet (attuatore su eoportal)
 
 thruster.thrust = 0.01;                                 % Nominal thrust [N]   
 thruster.direction = [ 0  0  0  0;   ...                % Direction in which the thrust is applied
@@ -126,7 +132,6 @@ thruster.firing_time = 0.05;                            % Minimum firing time [s
 control.frequency = 20;                  %[Hz]
 control.bdot_gain = 1e7*sat.I;
 control.bdot_end = 0.01;
-control.bdot_flag = false;
 control.bdot_filter = 0.5;
 
 control.pointing_toll = deg2rad(5);

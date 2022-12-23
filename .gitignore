@@ -3,3 +3,6 @@
 **/slprj/**
 **/*.slxc
 *.autosave
+report_images/
+*.mat
+
