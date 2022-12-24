@@ -29,6 +29,9 @@ configs;
 % initial angular velocity in body frame [rad/s]
 settings.w0 = [3e-2,1e-2,3e-2]'; 
 
+load_system('Model')
+set_param('Model/Dynamics/Integrator2','InitialCondition','settings.w0') % set intial w in the simulink model
+
 % initial attitude
 A_BN0 = [v0'/norm(v0); (cross(r0, v0))'/norm(cross(r0, v0)); r0'/norm(r0)];
 
@@ -52,22 +55,20 @@ clear q1 q2 q3 q4
 control.algorithm = 'De-tumbling';
 magnetorquers.dipole = 120;               % Maximum magnetic dipole [Am^2]
 phase1 = sim('Model.slx');
-save phase1 phase1
+
 %% Pointing
 
 % initial conditions ( final conditions of phase 1 )
 environment.theta_G0 = phase1.theta_G(end); 
 r0 = phase1.r_N(end,:)';
 v0 = phase1.v(end,:)';
-
+settings.w0 = [1e-2 1e-2 1e-2]';
 settings.w0 = deg2rad(phase1.w_BN(end,:))';
 settings.E0 = deg2rad(phase1.E_312(end,:)');
 
 control.algorithm = 'Pointing';
 magnetorquers.dipole = 350;      % Maximum magnetic dipole [Am^2]
 phase2 = sim('Model.slx');
-
-save phase2 phase2
 
 %% plots
 if strcmp(create_plots,'yes')
