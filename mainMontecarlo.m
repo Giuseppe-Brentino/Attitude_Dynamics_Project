@@ -109,25 +109,25 @@ stoch_time_w = figure('Units','normalized','OuterPosition',[0 0 1 1]);
 subplot(1,4,1)
 fitting = fit( stoch.wx',end_time','poly2' );
 plot(fitting,stoch.wx,end_time,'.')
-xlabel('\omega_x [deg/s]')
+xlabel('$\omega_x$ [deg/s]')
 ylabel('Time required for de-tumbling [h]')
 
 subplot(1,4,2)
 fitting = fit(stoch.wy',end_time','poly2' );
 plot(fitting,stoch.wy,end_time,'.')
-xlabel('\omega_y [deg/s]')
+xlabel('$\omega_y$ [deg/s]')
 ylabel('Time required for de-tumbling [h]')
 
 subplot(1,4,3)
 fitting = fit( stoch.wz',end_time','poly2' );
 plot(fitting,stoch.wz,end_time,'.')
-xlabel('\omega_z [deg/s]')
+xlabel('$\omega_z$ [deg/s]')
 ylabel('Time required for de-tumbling [h]')
 
 subplot(1,4,4)
 fitting = fit( stoch.w',end_time','poly2');
 plot(fitting,stoch.w,end_time,'.')
-xlabel('norm(\omega) [deg/s]')
+xlabel('$||\omega||$ [deg/s]')
 ylabel('Time required for de-tumbling [h]')
 
 % mean time and std
