@@ -110,13 +110,13 @@ ylabel('$A_e$')
 %% save plots
 if strcmp(save_plots,'yes')
     %de-tumbling
-    exportgraphics(fig_phase1_w,'.\report_images\w_detumbling.pdf','ContentType','vector')
-    exportgraphics(fig_phase1_T,'.\report_images\T_detumbling.pdf','ContentType','vector')
+    exportgraphics(fig_phase1_w,'.\report_images\w_detumbling.eps','ContentType','vector')
+    exportgraphics(fig_phase1_T,'.\report_images\T_detumbling.eps','ContentType','vector')
 
     %pointing
-    exportgraphics(fig_phase2_w,'.\report_images\w_pointing.pdf','ContentType','vector')
-    exportgraphics(fig_phase2_T,'.\report_images\T_pointing.pdf','ContentType','vector')
-    exportgraphics(fig_phase2_E,'.\report_images\E_pointing.pdf','ContentType','vector')
-    exportgraphics(fig_phase2_sens,'.\report_images\sensors_pointing.pdf','ContentType','vector')
-    exportgraphics(fig_phase2_err,'.\report_images\pointing.pdf','ContentType','vector')
+    exportgraphics(fig_phase2_w,'.\report_images\w_pointing.eps','ContentType','vector')
+    exportgraphics(fig_phase2_T,'.\report_images\T_pointing.eps','ContentType','vector')
+    exportgraphics(fig_phase2_E,'.\report_images\E_pointing.eps','ContentType','vector')
+    exportgraphics(fig_phase2_sens,'.\report_images\sensors_pointing.eps','ContentType','vector')
+    exportgraphics(fig_phase2_err,'.\report_images\pointing.eps','ContentType','vector')
 end
