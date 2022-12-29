@@ -16,10 +16,25 @@ addpath('./data/');
 addpath('./functions/');
 addpath('./Control validation/');
 
+%% Choose algorithm and plots from command window
+
+control.algorithm_vect = { 'De-tumbling', 'Pointing', 'De-tumbling + Pointing', 'No control' };
+
+alg_index = input(['Select the algorithm you want to test typing its corresponding number: \n' ...
+    ' 1: De-tumbling \n' ...
+    ' 2: Slew and pointing \n' ...
+    ' 3: De-tumbling, slew and pointing \n' ...
+    ' 4: No control \n'],'s');
+alg_index = str2double(alg_index);
+
+if ~(alg_index == 1 || alg_index == 2 || alg_index == 3 || alg_index == 4)
+    error('Choose a number between 1 and 4')
+end
+
 create_plots = input('Do you want to generate the plots? ("yes" or "no"): ','s');
 
 if strcmp(create_plots,'yes')
-    save_plots = input('Do you want to save the plots in pdf format? ("yes" or "no"): ','s');
+    save_plots = input('Do you want to save the plots in .eps format? ("yes" or "no"): ','s');
 end
 
 configs;
@@ -50,26 +65,50 @@ q3 = 1/(4*q4) * (A_BN0(1, 2) - A_BN0(2, 1));
 settings.q0 = [q1 q2 q3 q4]';             % initial estimamted quaternion [-]
 clear q1 q2 q3 q4
 
-%% De-tumbling
+%% Run simulation
 
-control.algorithm = 'De-tumbling';
-magnetorquers.dipole = 120;               % Maximum magnetic dipole [Am^2]
-phase1 = sim('Model.slx');
+switch alg_index
 
-%% Pointing
+    case 1 % De-tumbling
 
-% initial conditions ( final conditions of phase 1 )
-environment.theta_G0 = phase1.theta_G(end); 
-r0 = phase1.r_N(end,:)';
-v0 = phase1.v(end,:)';
-settings.w0 = [1e-2 1e-2 1e-2]';
-settings.w0 = deg2rad(phase1.w_BN(end,:))';
-settings.E0 = deg2rad(phase1.E_312(end,:)');
+        control.algorithm = control.algorithm_vect{1};
+        magnetorquers.dipole = 120;               % Maximum magnetic dipole [Am^2]
+        phase1 = sim('Model.slx');
 
-control.algorithm = 'Pointing';
-magnetorquers.dipole = 350;      % Maximum magnetic dipole [Am^2]
-phase2 = sim('Model.slx');
+    case 2 % Pointing
 
+        control.algorithm = control.algorithm_vect{2};
+        settings.w0 = [1e-2 1e-2 1e-2]';
+        magnetorquers.dipole = 350;      % Maximum magnetic dipole [Am^2]
+        phase2 = sim('Model.slx');
+
+    case 3 % De-tumbling + pointing
+
+        %De-tumbling
+        control.algorithm = control.algorithm_vect{1};
+        magnetorquers.dipole = 120;               % Maximum magnetic dipole [Am^2]
+        phase1 = sim('Model.slx');
+
+        %Pointing
+        % initial conditions ( final conditions of phase 1 )
+        environment.theta_G0 = phase1.theta_G(end);
+        r0 = phase1.r_N(end,:)';
+        v0 = phase1.v(end,:)';
+        settings.w0 = deg2rad(phase1.w_BN(end,:))';
+        settings.E0 = deg2rad(phase1.E_312(end,:)');
+
+        control.algorithm = control.algorithm_vect{2};
+        magnetorquers.dipole = 350;      % Maximum magnetic dipole [Am^2]
+        phase2 = sim('Model.slx');
+
+    case 4 % No control
+        
+        Simtime = settings.Time;
+        control.algorithm = control.algorithm_vect{4};
+        magnetorquers.dipole = 0;               % Maximum magnetic dipole [Am^2]
+        phase0 = sim('Model.slx');
+
+end
 %% plots
 if strcmp(create_plots,'yes')
     plots;
