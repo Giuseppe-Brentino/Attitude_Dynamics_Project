@@ -2,7 +2,7 @@ clearvars; clear all; clc;
 
 %{
     Compute the Schmidt quasi-normalization of IGRF coefficients up to 
-    order 12 and compute the matrix K useful to the on-line calculation of
+    order 13 and compute the matrix K useful to the on-line calculation of
     the Gaussian normalized associated Legendre polynomials and their
     derivatives.
     

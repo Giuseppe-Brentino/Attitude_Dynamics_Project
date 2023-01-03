@@ -85,10 +85,10 @@ sensors.star.ASB1 = [ 1       0          0; ...         % rotation matrix body t
                       0  cos(theta)  sin(theta); ...
                       0  -sin(theta) cos(theta)];
 sensors.star.ASB2 = [ 1       0          0; ...
-                      0  cos(-theta)  sin(-theta); ...  % rotation matrix body to sensor 2 CHECK
+                      0  cos(-theta)  sin(-theta); ...  % rotation matrix body to sensor 2
                       0  -sin(-theta)  cos(-theta)];
 sensors.star.opt_w = deg2rad(0.3);
-sensors.star.reduced_perf_w = deg2rad(1.5);
+sensors.star.reduced_perf_w = deg2rad(1.5);                              % maximum feasible angular velocity value 
 alfa1 = sensors.star.inclination - alfa - deg2rad(sensors.star.fov/2);   % lower angle between solar panel normal and star tracker normal 
                                                                          % such that sun is in fov of star tracker 
 alfa2 = sensors.star.inclination - alfa + deg2rad(sensors.star.fov/2);   % greater angle between solar panel normal and star tracker normal
