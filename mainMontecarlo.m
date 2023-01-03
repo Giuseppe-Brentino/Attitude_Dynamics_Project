@@ -11,7 +11,7 @@ addpath('./Control validation/');
 
 configs;
 
-Nsim = 400;         % number of simulations
+Nsim = 800;         % number of simulations
 
 %% Initial conditions after release from launcher
 
@@ -80,7 +80,7 @@ end
 
 %% Run simulation
 simulation = parsim(simIn);
-save simdata simulation
+
 %% plots
 
 stoch.wx = rad2deg(stoch.wx);
