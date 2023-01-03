@@ -18,10 +18,10 @@ if alg_index == 1 || alg_index == 3
     plot(phase1.tout,abs_w)
 
     xline(sensors.star.startup/3600,'--','LineWidth',1.5);
-    text(sensors.star.startup/3600+0.1,2.4,'Star sensors minimum start up time','FontSize',12)
+    text(sensors.star.startup/3600+0.1,2.4,'Star sensors minimum start up time','FontSize',14)
 
     xline(phase1.tout(end),'--','LineWidth',1.5);
-    text(phase1.tout(end)-0.75,2.4,'Angular velocity requirements satisfaction time','FontSize',12)
+    text(phase1.tout(end)-0.75,2.4,'Angular velocity requirements satisfaction time','FontSize',14)
 
     legend('$\omega_x$','$\omega_y$','$\omega_z$','$||\omega||$','','','Location','northeast');
 
